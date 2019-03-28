@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.wn.dao.FPDao">
+    <select id="getFinancingProduct" parameterType="financingProduct" resultType="financingProduct">
+         SELECT * FROM financingproduct
+         <where>
+             <if test="risk!=null and risk!='' and risk!=0">
+                 and risk=#{risk}
+             </if>
+            <if test="id!=null and id!=''">
+                       <bind name="param" value="'%'+id+'%'"/>
+                and id in(SELECT id FROM `financingproduct` where id LIKE #{param})
+            </if>
+         </where>
+    </select>
+    <insert id="AddFinancingProduct" parameterType="financingProduct">
+        INSERT ignore  INTO financingproduct (*) VALUES(#{id},#{risk},#{income},#{saleStarting},#{saleEnd},#{end});
+    </insert>
+</mapper>
